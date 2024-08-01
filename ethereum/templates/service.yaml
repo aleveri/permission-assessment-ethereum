@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ethereum.fullname" . }}-bootnode
+  labels:
+    {{- include "ethereum.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bootnode.service.type }}
+  ports:
+    - port: {{ .Values.bootnode.service.port }}
+      targetPort: 30303
+      protocol: TCP
+      name: tcp
+  selector:
+    app: {{ include "ethereum.fullname" . }}-bootnode
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ethereum.fullname" . }}-jsonrpc
+  labels:
+    {{- include "ethereum.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.jsonrpc.service.type }}
+  ports:
+    - port: {{ .Values.jsonrpc.service.port }}
+      targetPort: 8545
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "ethereum.fullname" . }}-jsonrpc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ethereum.fullname" . }}-miner
+  labels:
+    {{- include "ethereum.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.miner.service.type }}
+  ports:
+    - port: {{ .Values.miner.service.port }}
+      targetPort: 30303
+      protocol: TCP
+      name: tcp
+  selector:
+    app: {{ include "ethereum.fullname" . }}-miner
